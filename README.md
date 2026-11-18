@@ -31,6 +31,42 @@ not results from the original course submission. ARMA(2,1) was reported at
 3,084.73 in the original notebook; the local dependency versions reproduce
 3,084.70, a small numerical difference. MA(1) reproduces to two decimal places.
 
+## Visual walkthrough
+
+### 1. Attendance across the observed seasons
+
+![Yankees home-game attendance from the supplied 2022–2025 exports](figures/attendance_history.png)
+
+Each observation is one home game. The series shows substantial game-to-game
+variation; gaps between calendar dates are compressed into a sequential event index.
+
+### 2. Separate the underlying trend
+
+![Training attendance with the fitted LOWESS trend](figures/lowess_trend.png)
+
+The red LOWESS curve follows slower changes in the 2022–2024 training data.
+Weekday effects are estimated after subtracting this trend; the remaining
+residuals are used to fit the ARMA candidates.
+
+### 3. Reconstruct an attendance forecast
+
+```mermaid
+flowchart TD
+    A["2022–2024 training attendance"] --> B["Estimate LOWESS trend"]
+    B --> C["Subtract trend; estimate weekday effects"]
+    C --> D["Subtract weekday effects; fit residual models"]
+    D --> E["Forecast residuals"]
+    B --> F["Hold final training trend value flat"]
+    C --> G["Map effects to 2025 game weekdays"]
+    E --> H["Add components to forecast attendance"]
+    F --> H
+    G --> H
+    H --> I["Compare with 80 observed 2025 games"]
+```
+
+All decomposition estimates come from training observations. As discussed below,
+2025 comparison scores subsequently informed the choice of the final model.
+
 ## Approach
 
 1. Filter schedule exports to home games and clean dates and attendance.
