@@ -1,0 +1,10 @@
+{
+  "train_games": 237,
+  "test_games": 80,
+  "rmse_attendees": {
+    "ARIMA(0, 0, 1)": 3023.776331508029,
+    "ARIMA(2, 0, 1)": 3084.70140068138,
+    "training_mean": 4236.390840607694,
+    "training_weekday_mean": 3237.1577954133822
+  }
+}
